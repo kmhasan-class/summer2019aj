@@ -197,8 +197,9 @@ public class LambdaExpressionsDemo {
 
         @Override
         public void run() {
-            for (int i = 1; i <= 5; i++)
-                System.out.printf("%10s %4d\n", label, i);
+            for (int i = 1; i <= 100000; i++) {
+                System.out.printf("%10s %4d %.5f\n", label, i, Math.sqrt(i));
+            }
         }
         
     }
@@ -211,7 +212,7 @@ public class LambdaExpressionsDemo {
         Thread threadB = new Thread(new YourThread("B"));
         Thread threadC = new Thread(() -> {
                 String label = "C";
-                for (int i = 1; i <= 5; i++)
+                for (int i = 1; i <= 1000; i++)
                     System.out.printf("%10s %4d\n", label, i);
             });
         threadA.start();

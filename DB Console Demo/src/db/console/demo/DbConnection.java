@@ -42,9 +42,10 @@ public class DbConnection {
 //            System.getenv().forEach((key, value) -> System.out.printf("Key [%s] value [%s]\n", key, value));
 //            System.out.println("Done printing");
             
-            String username = System.getenv("username");
-            System.out.printf("Username as environment variable: [%s]\n", username);
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/registrationdb", "summer2019aj", "aj");
+            String username = System.getProperty("username");
+            String password = System.getProperty("password");
+            System.out.printf("Username:password as environment variable: [%s]:[%s]\n", username, password);
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/registrationdb", username, password);
             System.out.println("Connection created");
 //        } catch (FileNotFoundException ex) {
 //            Logger.getLogger(DBConsoleDemo.class.getName()).log(Level.SEVERE, null, ex);

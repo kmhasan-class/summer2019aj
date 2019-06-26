@@ -8,6 +8,8 @@ package db.console.demo;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,25 +28,31 @@ import java.util.stream.Collectors;
  * @author kmhasan
  */
 public class StudentDAOMySQLImplementation implements StudentDAO {
-    // TODO Note to self: THIS CODE DOES NOT WORK!
     
     private Connection connection;
     private PreparedStatement preparedCreateStatement;
     private PreparedStatement preparedRetrieveByIdStatement;
     private PreparedStatement preparedRetrieveAllStatement;
+    private PreparedStatement preparedDeleteAllStatement;
     
     public StudentDAOMySQLImplementation() {
         try {
             connection = DbConnection.getConnection();
             
-            FileReader fileReader = new FileReader("query.properties");
+            InputStream inputStream = getClass().getResourceAsStream("resources/query.properties");
+            System.out.println("InputStream " + inputStream);
+            InputStreamReader fileReader = new InputStreamReader(inputStream);
+            System.out.println("InputStreamReader " + fileReader);
+//            FileReader fileReader = new FileReader("resources/query.properties");
             Properties properties = new Properties();
             properties.load(fileReader);
             System.out.printf("INSERT [%s]\n", properties.getProperty("INSERT_STUDENT_QUERY"));
             
             preparedCreateStatement = connection.prepareStatement(properties.getProperty("INSERT_STUDENT_QUERY"));
+//            preparedCreateStatement = connection.prepareStatement("INSERT INTO student VALUES(?, ?);");
             preparedRetrieveByIdStatement = connection.prepareStatement(properties.getProperty("RETRIEVE_STUDENT_BY_ID_QUERY"));
             preparedRetrieveAllStatement = connection.prepareStatement(properties.getProperty("RETRIEVE_ALL_STUDENTS_QUERY"));
+            preparedDeleteAllStatement = connection.prepareStatement(properties.getProperty("DELETE_ALL_STUDENTS_QUERY"));
         } catch (SQLException ex) {
             Logger.getLogger(DBConsoleDemo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
@@ -56,10 +64,14 @@ public class StudentDAOMySQLImplementation implements StudentDAO {
     
     @Override
     public Student create(Student student) {
+        // TODO throw ValidationException if the student ID is longer than 13 characters
+        // TODO write your own ValidationException class extending it from the Exception class
+        
         try {
             //Statement statement = connection.createStatement();
             System.out.println(preparedCreateStatement);
             preparedCreateStatement.setString(1, student.getId());
+//            preparedCreateStatement.setString(2, student.getId());
             preparedCreateStatement.setString(2, student.getName());
             int executeUpdate = preparedCreateStatement.executeUpdate();
             return retrieve(student.getId());
@@ -110,6 +122,19 @@ public class StudentDAOMySQLImplementation implements StudentDAO {
     @Override
     public List<Student> retrieve(Predicate<Student> predicate) {
         return retrieve().stream().filter(predicate).collect(Collectors.toList());
+    }
+
+    @Override
+    public int deleteAll() {
+        int deletedRows = 0;
+        try {
+            //Statement statement = connection.createStatement();
+            System.out.println(preparedDeleteAllStatement);
+            deletedRows = preparedDeleteAllStatement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBConsoleDemo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return deletedRows;
     }
 }
 

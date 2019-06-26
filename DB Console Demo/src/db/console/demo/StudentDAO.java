@@ -20,5 +20,6 @@ public interface StudentDAO {
     default int count() {
         return retrieve().size();
     }
+    int deleteAll();
     // TODO write all the other methods from the UML class diagram
 }

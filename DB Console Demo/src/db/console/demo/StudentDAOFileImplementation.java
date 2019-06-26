@@ -56,5 +56,11 @@ public class StudentDAOFileImplementation implements StudentDAO {
     public List<Student> retrieve(Predicate<Student> predicate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public int deleteAll() {
+        // TODO You guys know what to do, I don't know how to handle files
+        return 0;
+    }
     
 }

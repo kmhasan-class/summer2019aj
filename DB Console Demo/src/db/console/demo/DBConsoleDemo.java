@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,7 +82,9 @@ public class DBConsoleDemo {
         
         StudentDAO studentDAO = new StudentDAOMySQLImplementation();
 //        StudentDAO studentDAO = new StudentDAOFileImplementation();
-        Student student = new Student("4497", "Nemo Nobody");
+
+        Random random = new Random();
+        Student student = new Student(String.format("%013d", random.nextInt()), "Nemo Nobody");
         System.out.printf("Inserting [%s]\n", student);
         Student createdStudent = studentDAO.create(student);
         System.out.printf("Inserted  [%s]\n", createdStudent);

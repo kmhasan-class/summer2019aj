@@ -5,6 +5,8 @@
  */
 package db.console.demo;
 
+import java.util.Objects;
+
 /**
  *
  * @author kmhasan
@@ -37,6 +39,27 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" + "id=" + id + ", name=" + name + '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Student other = (Student) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
     }
     
     
