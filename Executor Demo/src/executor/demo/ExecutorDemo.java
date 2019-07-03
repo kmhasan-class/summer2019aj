@@ -6,6 +6,8 @@
 package executor.demo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -17,9 +19,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class YourThread implements Runnable {
+
     String label;
     int n;
-    
+
     public YourThread(String label, int n) {
         this.label = label;
         this.n = n;
@@ -39,6 +42,7 @@ class YourThread implements Runnable {
 }
 
 class YourCalculatingThread implements Callable<Long> {
+
     private long startingNumber;
     private long endingNumber;
 
@@ -46,12 +50,13 @@ class YourCalculatingThread implements Callable<Long> {
         this.startingNumber = startingNumber;
         this.endingNumber = endingNumber;
     }
-    
+
     @Override
     public Long call() throws Exception {
         long result = 0;
-        for (long i = startingNumber; i <= endingNumber; i++)
+        for (long i = startingNumber; i <= endingNumber; i++) {
             result = result + i;
+        }
         return result;
     }
 }
@@ -72,18 +77,21 @@ public class ExecutorDemo {
         int availableProcessors = Runtime.getRuntime().availableProcessors();
         System.out.println("Available processors " + availableProcessors);
         ExecutorService fixedThreadPool = Executors.newFixedThreadPool(availableProcessors);
-        for (int i = 0; i < 3; i++)
-            fixedThreadPool.execute(new YourThread("A" + i , 5));
-        for (int i = 0; i < 3; i++)
-            fixedThreadPool.execute(new YourThread("B" + i , 5));
-        for (int i = 0; i < 3; i++)
-            fixedThreadPool.submit(new YourThread("C" + i , 5));
-        
+        for (int i = 0; i < 3; i++) {
+            fixedThreadPool.execute(new YourThread("A" + i, 5));
+        }
+        for (int i = 0; i < 3; i++) {
+            fixedThreadPool.execute(new YourThread("B" + i, 5));
+        }
+        for (int i = 0; i < 3; i++) {
+            fixedThreadPool.submit(new YourThread("C" + i, 5));
+        }
+
         Future<Long> result = fixedThreadPool.submit(new YourCalculatingThread(1, 10000000000l));
 
         System.out.println("Done with submitting tasks");
         fixedThreadPool.shutdown();
-        
+
         try {
             System.out.println("Result is " + result.get(2, TimeUnit.SECONDS));
         } catch (InterruptedException ex) {
@@ -93,10 +101,39 @@ public class ExecutorDemo {
         } catch (TimeoutException ex) {
             Logger.getLogger(ExecutorDemo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         System.out.println("Done with everything");
-        
+
 //        fixedThreadPool.execute(new YourThread("C" + 0 , 5));
+    }
+
+    public void quiz2question5() {
+        List<Integer> numberList = Arrays.asList(4, 2, 1, 5, 2, 3);
+
+        Callable<Double> averageCalculator1 = () -> {
+            double sum = 0.0;
+            for (int i = 0; i < numberList.size(); i++) {
+                sum = sum + numberList.get(i);
+            }
+            double average = sum / numberList.size();
+            return average;
+        };
+
+        Callable<Double> averageCalculator2 = () -> numberList
+                .stream()
+                .mapToDouble(Integer::doubleValue)
+                .average()
+                .orElse(0);
+        
+        
+        ExecutorService fixedThreadPool = Executors.newFixedThreadPool(4);
+        
+        fixedThreadPool.submit(averageCalculator2);
+        fixedThreadPool.submit(() -> numberList
+                .stream()
+                .mapToDouble(Integer::doubleValue)
+                .average()
+                .orElse(0));
     }
 
     /**
@@ -105,5 +142,5 @@ public class ExecutorDemo {
     public static void main(String[] args) {
         new ExecutorDemo();
     }
-    
+
 }

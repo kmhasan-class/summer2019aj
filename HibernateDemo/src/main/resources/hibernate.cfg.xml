@@ -1,0 +1,16 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- JDBC Database connection settings -->
+        <!-- IP address of the demo PC = 172.17.3.187 -->
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/registrationdb?useSSL=false</property>
+        <property name="connection.username">summer2019aj</property>
+        <property name="connection.password">aj</property>
+        <property name="show_sql">true</property>
+        <property name="hbm2ddl.auto">create-drop</property>
+        <mapping class="bd.edu.seu.hibernatedemo.Student" />
+    </session-factory>
+</hibernate-configuration>
