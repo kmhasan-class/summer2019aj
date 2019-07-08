@@ -5,10 +5,10 @@
  */
 package bd.edu.seu.hibernatedemo.test;
 
-import bd.edu.seu.hibernatedemo.Student;
-import bd.edu.seu.hibernatedemo.StudentDao;
+import bd.edu.seu.hibernatedemo.*;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -48,7 +48,9 @@ public class StudentDaoTest {
     @org.junit.Test
     public void testCreate() {
         System.out.println("create");
-        Student student = new Student(1234l, "John Doe", LocalDate.of(2001, Month.FEBRUARY, 20));
+        Student student = new Student(1234l, new Name("John", "Doe"), LocalDate.of(2001, Month.FEBRUARY, 20), "nobody@nowhere.com", new ArrayList<>());
+        student.getPhoneList().add("12344457");
+        student.getPhoneList().add("88774565");
         StudentDao instance = new StudentDao();
         instance.create(student);
         
@@ -62,8 +64,8 @@ public class StudentDaoTest {
     public void testRetrieveAll() {
         System.out.println("retrieve all");
         StudentDao instance = new StudentDao();
-        Student student1 = new Student(1236l, "John Doe", LocalDate.of(2001, Month.FEBRUARY, 20));
-        Student student2 = new Student(1237l, "Jane Doe", LocalDate.of(2002, Month.MARCH, 2));
+        Student student1 = new Student(1236l, new Name("John", "Doe"), LocalDate.of(2001, Month.FEBRUARY, 20), "nobody@nowhere.com", new ArrayList<>());
+        Student student2 = new Student(1237l, new Name("Jane", "Doe"), LocalDate.of(2002, Month.MARCH, 2), "nobody@nowhere.com", new ArrayList<>());
         instance.create(student1);
         instance.create(student2);
         List<Student> studentList = instance.retrieve();
@@ -82,7 +84,8 @@ public class StudentDaoTest {
         System.out.println("retrieve by Id");
         StudentDao instance = new StudentDao();
         Long longId = 2441139l;
-        Student student1 = new Student(longId, "Bela Bose", LocalDate.of(2001, Month.FEBRUARY, 20));
+        Student student1 = new Student(longId, new Name("Bela", "Bose"), LocalDate.of(2001, Month.FEBRUARY, 20), "nobody@nowhere.com", new ArrayList<>());
+        student1.getPhoneList().add("2441139");
         instance.create(student1);
         Student student2 = instance.retrieve(longId);
         assertEquals(student1, student2);
