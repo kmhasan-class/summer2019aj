@@ -5,14 +5,14 @@
  */
 package bd.edu.seu.hibernatedemo;
 
-import java.util.List;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-
 /**
  *
  * @author kmhasan
  */
-public class StudentDao extends CrudDaoMySQLImplementation<Student, Long> {
+public enum Rank {
+    LECTURER,
+    SENIOR_LECTURER,
+    ASSISTANT_PROFESSOR,
+    ASSOCIATE_PROFESSOR,
+    PROFESSOR;
 }

@@ -12,5 +12,6 @@
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">create-drop</property>
         <mapping class="bd.edu.seu.hibernatedemo.Student" />
+        <mapping class="bd.edu.seu.hibernatedemo.Faculty" />
     </session-factory>
 </hibernate-configuration>
