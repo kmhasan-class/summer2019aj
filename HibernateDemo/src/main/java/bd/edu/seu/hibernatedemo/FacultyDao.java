@@ -14,10 +14,6 @@ import org.hibernate.Transaction;
  * @author kmhasan
  */
 public class FacultyDao extends CrudDaoMySQLImplementation<Faculty, String> {
-    @Override
-    public List<Faculty> retrieve() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Faculty retrieve(String id) {

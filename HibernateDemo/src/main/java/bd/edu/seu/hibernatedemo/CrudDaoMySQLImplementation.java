@@ -44,10 +44,13 @@ public abstract class CrudDaoMySQLImplementation<T, I> implements CrudDao<T, I> 
         T t = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Query<T> query = null;
+
             // TODO ensure that you're using a generic query
-            session.createQuery("from Student", t.getClass());
-            return query.getResultList();
+            // TODO hint: https://stackoverflow.com/questions/3403909/get-generic-type-of-class-at-runtime
+            String classname = t.getClass().getSimpleName();
+            System.out.printf("Class name [%s]\n", classname);
+            Query<?> createQuery = session.createQuery("from " + classname, t.getClass());
+            return (List<T>) createQuery.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

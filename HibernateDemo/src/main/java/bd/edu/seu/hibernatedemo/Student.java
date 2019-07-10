@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Id;
 import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import lombok.*;
@@ -31,8 +32,8 @@ public class Student {
     private long id;
     private Name name;
     private LocalDate dob;
-    @Size(min = 5, max = 10, message = "Email addresses must be between 5 to 10 characters long")
-    @Email(message = "Email address must be a valid email address")
+    //@Size(min = 5, max = 10, message = "Email addresses must be between 5 to 10 characters long")
+    //@Email(message = "Email address must be a valid email address")
     private String email;
     @ElementCollection
     private List<String> phoneList;
@@ -41,4 +42,6 @@ public class Student {
     // TODO add a Gender enumeration to record the gender of the student (follow the user guide)
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @ManyToOne
+    private Faculty adviser;
 }

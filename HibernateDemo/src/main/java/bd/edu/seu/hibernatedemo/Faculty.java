@@ -5,6 +5,7 @@
  */
 package bd.edu.seu.hibernatedemo;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -25,4 +26,8 @@ public class Faculty {
     private String name;
     @Enumerated(EnumType.STRING)
     private Rank rank;
+    // TODO fix this part
+    // TODO add proper unit tests to check that this indeed works
+    // TODO fix the DAO implementations (retrieve operations)
+    private List<Student> studentList;
 }
