@@ -1,9 +1,12 @@
 package bd.edu.seu.springbootdemo.controller;
 
+import bd.edu.seu.springbootdemo.exception.ResourceAlreadyExistsException;
+import bd.edu.seu.springbootdemo.exception.ResourceDoesNotExistException;
 import bd.edu.seu.springbootdemo.model.Student;
 import bd.edu.seu.springbootdemo.repository.StudentRepository;
 import bd.edu.seu.springbootdemo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +43,18 @@ public class StudentController {
     }
 
     // GET http://172.17.3.87:8081/api/v1/students/1234
+    // DONE
     @GetMapping("/{id}")
-    public Student getStudent(@PathVariable long id) {
-        return null;
+    public ResponseEntity<Student> getStudent(@PathVariable long id) {
+        try {
+            Student student = studentService.findById(id);
+            return ResponseEntity.ok(student);
+        } catch (ResourceDoesNotExistException e) {
+            //e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
 //        return studentRepository.findById(id).get();
     }
 
@@ -56,16 +68,8 @@ public class StudentController {
     // GET http://172.17.3.87:8081/api/v1/students
     @GetMapping("")
     public ResponseEntity<List<Student>> getStudents() {
-//        List<Student> studentList = new ArrayList<>();
-//        studentRepository.findAll().forEach(studentList::add);
-//        return studentList;
-        List<Student> studentList = null;
-        try {
-//            studentList = studentMap.values().stream().collect(Collectors.toList());
-            return ResponseEntity.ok(studentList);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(studentList);
-        }
+        List<Student> studentList = studentService.findAll();
+        return ResponseEntity.ok(studentList);
     }
 //
 //    @GetMapping("/insert/{id}/{name}")
@@ -75,19 +79,28 @@ public class StudentController {
 
     // POST http://172.17.3.87:8081/api/v1/students
     @PostMapping("")
-    public Student insertStudent(@RequestBody Student student) {
-        return null;
+    // DONE
+    public ResponseEntity<Student> insertStudent(@RequestBody Student student) {
+        try {
+            Student insertedStudent = studentService.insertStudent(student);
+            return ResponseEntity.status(HttpStatus.CREATED).body(insertedStudent);
+        } catch (ResourceAlreadyExistsException e) {
+            //e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
 //        return studentRepository.save(student);
     }
 
     // DELETE http://172.17.3.87:8081/api/v1/students
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteStudent(@PathVariable long id) {
-//        boolean deleted = studentService.deleteById(id);
-//        if (deleted)
-//            return ResponseEntity.ok(id);
-//        else return ResponseEntity.notFound().build();
-        return null;
+        try {
+            boolean deleted = studentService.deleteById(id);
+            return ResponseEntity.ok(id);
+        } catch (ResourceDoesNotExistException e) {
+            return ResponseEntity.notFound().build();
+//            e.printStackTrace();
+        }
     }
 
 }
