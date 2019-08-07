@@ -14,9 +14,11 @@ public class SectionTest {
 
         Section section1 = new Section(course, "KMH", 1, 30, 52);
         Section section2 = new Section(course, "AR", 2, 25, 52);
-
+/*
         course.addSection(section1);
         course.addSection(section2);
+*/
+        course.addSection(section1, section2);
 
         System.out.println(course);
         System.out.println(section1);

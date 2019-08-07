@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +18,7 @@ public class Section {
     private int semesterId;
 
     @ToString.Include
+    @Id
     private String getLabel() {
         return course.getCode() + "." + number + "." + semesterId;
     }

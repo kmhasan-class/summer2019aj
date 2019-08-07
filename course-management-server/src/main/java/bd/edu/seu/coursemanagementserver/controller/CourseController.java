@@ -1,11 +1,10 @@
 package bd.edu.seu.coursemanagementserver.controller;
 
 import bd.edu.seu.coursemanagementserver.model.Course;
+import bd.edu.seu.coursemanagementserver.repository.CourseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,24 +12,21 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/courses")
 public class CourseController {
-    // TODO remove the fake course list and let's get something real from the cloud
-    private List<Course> courseList;
+    private CourseRepository courseRepository;
 
-    public CourseController() {
-        courseList = new ArrayList<>();
-        courseList.add(new Course("CSE4047", "Advanced Java"));
-        courseList.add(new Course("CSE4048", "Advanced Java Lab"));
+    public CourseController(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
     }
 
     @GetMapping(value = "")
     public ResponseEntity<List<Course>> findAll() {
-        return ResponseEntity.ok(courseList);
+        return ResponseEntity.ok(courseRepository.findAll());
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<Course> save(Course course) {
-        courseList.add(course);
-        return ResponseEntity.created(null).body(course);
+    public ResponseEntity<Course> save(@RequestBody Course course) {
+        Course savedCourse = courseRepository.save(course);
+        return ResponseEntity.created(null).body(savedCourse);
     }
 }
 
