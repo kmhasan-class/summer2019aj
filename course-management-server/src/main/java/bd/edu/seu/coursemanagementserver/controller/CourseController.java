@@ -20,7 +20,9 @@ public class CourseController {
 
     @GetMapping(value = "")
     public ResponseEntity<List<Course>> findAll() {
-        return ResponseEntity.ok(courseRepository.findAll());
+        List<Course> courseList = courseRepository.findAll();
+        courseList.stream().forEach(course -> course.setServedBy("KMH"));
+        return ResponseEntity.ok(courseList);
     }
 
     @PostMapping(value = "")

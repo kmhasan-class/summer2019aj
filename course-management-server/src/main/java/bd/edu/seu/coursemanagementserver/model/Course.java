@@ -18,6 +18,7 @@ public class Course {
     private String code;
     private String title;
     private List<Section> sectionList;
+    private String servedBy;
 
     public Course(String code, String title) {
         this.code = code;
