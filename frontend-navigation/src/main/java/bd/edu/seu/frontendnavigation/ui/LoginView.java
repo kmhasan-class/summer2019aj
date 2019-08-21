@@ -1,5 +1,7 @@
 package bd.edu.seu.frontendnavigation.ui;
 
+import bd.edu.seu.frontendnavigation.model.LoginToken;
+import bd.edu.seu.frontendnavigation.service.AuthenticationService;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -12,10 +14,12 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
+import javax.servlet.http.HttpSession;
+
 @Route("login")
 public class LoginView extends Dialog {
 
-    public LoginView() {
+    public LoginView(AuthenticationService authenticationService, HttpSession httpSession) {
         super();
 
         Image image = new Image();
@@ -29,7 +33,23 @@ public class LoginView extends Dialog {
         Label statusLabel = new Label();
 
         loginButton.addClickListener(event -> {
-            loginButton.getUI().ifPresent(ui -> ui.navigate("faculty"));
+                LoginToken loginToken = authenticationService.authenticate(usernameField.getValue(),
+                        passwordField.getValue());
+
+                switch (loginToken.getRole()) {
+                    case "student":
+                    case "faculty":
+                        httpSession.setAttribute("user", loginToken);
+                        loginButton.getUI().ifPresent(ui -> ui.navigate(loginToken.getRole()));
+                        break;
+                    case "norole":
+                        httpSession.setAttribute("user", loginToken);
+                        statusLabel.setText("Incorrect username/password");
+                        break;
+                    default:
+                        break;
+                }
+                //ui.navigate("faculty");
         });
 
         FormLayout formLayout = new FormLayout();
